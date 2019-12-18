@@ -11,6 +11,14 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   articles.associate = function(models) {
     // associations can be defined here
+    articles.belongsTo(models.categories, {
+      as: 'categoriesId',
+      foreignKey: 'category_id'
+    })
+    articles.belongsTo(models.users, {
+      as: 'usersId',
+      foreignKey: 'author_id'
+    })
   };
   return articles;
 };
