@@ -28,8 +28,31 @@ exports.showArticles = (req, res) => {
   }).then(categories => res.send(categories));
 };
 
-exports.store = (req, res) => {};
+exports.store = (req, res) => {
+  Category.create(req.body).then(categories => {
+    res.send({
+      message: "success",
+      categories
+    });
+  });
+};
 
-exports.update = (req, res) => {};
+exports.update = (req, res) => {
+  Category.update(req.body, { where: { id: req.params.id } }).then(
+    categories => {
+      res.send({
+        message: "success",
+        categories
+      });
+    }
+  );
+};
 
-exports.delete = (req, res) => {};
+exports.delete = (req, res) => {
+  Category.destroy({ where: { id: req.params.id } }).then(categories => {
+    res.send({
+      message: "success",
+      categories
+    });
+  });
+};
