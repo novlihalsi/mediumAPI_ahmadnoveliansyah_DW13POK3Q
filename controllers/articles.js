@@ -14,6 +14,26 @@ exports.index = (req, res) => {
     .catch(e => res.send(e));
 };
 
+exports.related = (req, res) => {
+  Articles.findAll({
+    where: { category_id: req.params.id },
+    include: [
+      { model: Users, as: "usersId", attributes: ["fullname"] },
+      {
+        model: Categories,
+        as: "categoriesId"
+      },
+      {
+        model: Comments,
+        as: "commentId",
+        include: [
+          { model: Users, as: "usersComment", attributes: ["fullname"] }
+        ]
+      }
+    ]
+  }).then(articles => res.send(articles));
+};
+
 exports.show = (req, res) => {
   Articles.findOne({ where: { id: req.params.id } }).then(articles =>
     res.send(articles)
@@ -27,14 +47,7 @@ exports.detailarticles = (req, res) => {
       { model: Users, as: "usersId", attributes: ["fullname"] },
       {
         model: Categories,
-        as: "categoriesId",
-        include: [
-          {
-            model: Articles,
-            as: "articlesId",
-            include: [{ model: Users, as: "usersId" }]
-          }
-        ]
+        as: "categoriesId"
       },
       {
         model: Comments,
